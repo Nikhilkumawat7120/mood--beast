@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodBeats - Bollywood Edition</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff3e6c;
+            --primary-light: #ff6b8b;
+            --primary-dark: #ff0a4d;
+            --secondary: #ffd700;
+            --secondary-light: #fff64f;
+            --secondary-dark: #ffc107;
+            --light: #f5f5f5;
+            --dark: #212121;
+            --gray: #757575;
+            --gradient-1: linear-gradient(45deg, var(--primary), var(--secondary));
+            --gradient-2: linear-gradient(45deg, var(--primary-light), var(--secondary-light));
+            --gradient-3: linear-gradient(45deg, var(--primary-dark), var(--secondary-dark));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center center/cover no-repeat fixed;
+            min-height: 100vh;
+            padding: 30px 15px;
+            color: var(--dark);
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .container, .header, .form-container, .mood-section, .empty-state, footer {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+            animation: logoPulse 2s infinite;
+        }
+        
+        @keyframes logoPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        
+        .form-container {
+            background: linear-gradient(135deg, #b3e0ff 0%, #b3e0ff 30%, #fff 40%, #b3e0ff 60%, #fff 80%, #b3e0ff 100%);
+            color: #212121;
+            border: 1.5px solid #b3e0ff;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            backdrop-filter: blur(8px);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            margin: 0 auto 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 3px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #1976d2;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field {
+            position: relative;
+            margin-bottom: 5px;
+        }
+        
+        .input-field i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        input[type="number"]:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 62, 108, 0.1);
+            background: white;
+        }
+        
+        .range-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 8px;
+            padding: 0 5px;
+        }
+        
+        .value-display {
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin: 10px 0;
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            display: inline-block;
+            min-width: 60px;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, #ff3e6c 0%, #ffdeed 100%);
+            color: #212121;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(255, 62, 108, 0.18);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        button i {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #ff6b8b 0%, #ffd700 100%);
+            color: #000;
+        }
+        
+        .mood-section {
+            text-align: center;
+            margin: 50px auto 30px;
+            max-width: 900px;
+            position: relative;
+        }
+        
+        .mood-title {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            border-radius: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: moodTitleFloat 3s ease-in-out infinite;
+            font-size: 1.3rem;
+        }
+        
+        .mood-name {
+            color: var(--primary);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .mood-name::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .mood-title:hover .mood-name::after {
+            transform: scaleX(1);
+        }
+        
+        .songs-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 0 auto;
+            max-width: 1100px;
+        }
+        
+        .song-card {
+            background: rgba(30, 30, 30, 0.85);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+        
+        .song-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .song-card:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .song-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 4px solid var(--primary-light);
+            transition: transform 0.4s ease;
+        }
+        
+        .song-card:hover .song-img {
+            transform: scale(1.05);
+        }
+        
+        .song-info {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .song-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+            transition: color 0.3s ease;
+        }
+        
+        .song-card:hover .song-name {
+            color: var(--primary);
+        }
+        
+        .audio-player {
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .audio-player::-webkit-media-controls-panel {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .audio-player::-webkit-media-controls-current-time-display,
+        .audio-player::-webkit-media-controls-time-remaining-display {
+            color: var(--primary);
+        }
+        
+        .empty-state {
+            text-align: center;
+            max-width: 600px;
+            margin: 60px auto;
+            background: rgba(30, 30, 30, 0.85);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes iconFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .empty-text {
+            color: var(--gray);
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Range input styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.18);
+            outline: none;
+            margin: 10px 0;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff3e6c, #ffdeed);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 8px #ff3e6c88;
+            border: 2px solid #fff;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: linear-gradient(135deg, #ff6b8b, #ffd700);
+            box-shadow: 0 0 12px #ff3e6c;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .songs-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .songs-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">MoodBeats</h1>
+            <p class="tagline">Your Bollywood Music Companion</p>
+        </div>
+        
+        <form method="POST" class="form-container">
+            <h2 class="form-title">How are you feeling today?</h2>
+            
+            <div class="form-group">
+                <label for="energy">Energy Level</label>
+                <input type="range" min="1" max="10" step="0.1" name="energy" id="energy" value="5" oninput="updateValue('energy-value', this.value)" required>
+                <div class="value-display" id="energy-value">5.0</div>
+                <div class="range-values">
+                    <span>Low</span>
+                    <span>High</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="danceability">Danceability</label>
+                <input type="range" min="1" max="10" step="0.1" name="danceability" id="danceability" value="5" oninput="updateValue('dance-value', this.value)" required>
+                <div class="value-display" id="dance-value">5.0</div>
+                <div class="range-values">
+                    <span>Low</span>
+                    <span>High</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="valence">Positivity</label>
+                <input type="range" min="1" max="10" step="0.1" name="valence" id="valence" value="5" oninput="updateValue('valence-value', this.value)" required>
+                <div class="value-display" id="valence-value">5.0</div>
+                <div class="range-values">
+                    <span>Low</span>
+                    <span>High</span>
+                </div>
+            </div>
+            
+            <button type="submit">Find My Perfect Songs <i class="fas fa-music"></i></button>
+        </form>
+        
+        {% if mood %}
+        <div class="mood-section">
+            <div class="mood-title">
+                <i class="fas fa-heart"></i> Your Mood: <span class="mood-name">{{ mood }}</span>
+            </div>
+            
+            <div class="songs-container">
+                {% for song in songs %}
+                <div class="song-card">
+                    <img src="{{ song.image_url }}" alt="{{ song.name }}" class="song-img">
+                    <div class="song-info">
+                        <div class="song-name">{{ song.name }}</div>
+                        <audio controls class="audio-player">
+                            <source src="{{ song.audio_url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-music"></i>
+            </div>
+            <p class="empty-text">Share your mood by adjusting the sliders above, and we'll recommend Bollywood songs that match your current vibe!</p>
+        </div>
+        {% endif %}
+        
+        <footer>
+            MoodBeats - Bollywood Edition © 2025 | Your AI-powered music companion
+        </footer>
+    </div>
+    
+    <script>
+        function updateValue(elementId, value) {
+            document.getElementById(elementId).textContent = parseFloat(value).toFixed(1);
+        }
+    </script>
+    <script>
+      function updateValue(id, val) {
+          document.getElementById(id).textContent = parseFloat(val).toFixed(1);
+      }
+  
+      // Stop previous audio when new audio is played
+      const audioPlayers = document.querySelectorAll('.audio-player');
+  
+      audioPlayers.forEach((player) => {
+          player.addEventListener('play', () => {
+              audioPlayers.forEach((otherPlayer) => {
+                  if (otherPlayer !== player) {
+                      otherPlayer.pause();
+                      otherPlayer.currentTime = 0;
+                  }
+              });
+          });
+      });
+      </script>
+</body>
+</html>
