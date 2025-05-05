@@ -36,12 +36,12 @@ song_db = {
         {'name': 'Ratata_Ratata', 'img': 'mot6.jpg', 'file': 'mot6.mp3'}        
     ],
     'Party': [
-        {'name': 'Byan badmash', 'img': 'party1.jpg', 'file': 'party1.mp3'},
+        {'name': 'Gallan Goodiyaan', 'img': 'party1.jpg', 'file': 'party1.mp3'},
         {'name': 'Hookah nar', 'img': 'party2.jpg', 'file': 'party2.mp3'},
-        {'name': 'Gori nache nagodi nache', 'img': 'party3.jpg', 'file': 'party3.mp3'},
+        {'name': 'Loondon Thumakda', 'img': 'party3.jpg', 'file': 'party3.mp3'},
         {'name': 'Abhi to party suru hue h', 'img': 'party4.jpg', 'file': 'party4.mp3'},
         {'name': 'Sauda khara khara', 'img': 'party5.jpg', 'file': 'party5.mp3'},
-        {'name': 'Mujh ko rana ji mafh karna', 'img': 'party6.jpg', 'file': 'party6.mp3'}
+        {'name': 'Nachde Ne Sare', 'img': 'party6.jpg', 'file': 'party6.mp3'}
     ]
 }
 
